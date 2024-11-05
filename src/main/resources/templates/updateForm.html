@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/scoring/update" th:object="${scoring}" >
+    id <input th:field="*{id}" readonly> <br/>
+
+    content <textarea th:field="*{content}" rows="5" cols="40">
+ </textarea><br/>
+    start-time <input th:field="*{start}"> <br/>
+    end-time <input th:field="*{end}"> <br/>
+    <input type="submit" value="수정"/>
+</form>
+
+</body>
+</html>

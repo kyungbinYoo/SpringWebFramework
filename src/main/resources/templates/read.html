@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    집중력 스코어링 <br/>
+    집중  : [[${movie.title}]] <br/>
+    <textarea rows="5" cols="40" th:text="${scoring.content}">
+     </textarea><br/>
+    시작시간: <p th:text="${scoring.start}"></p>
+    종료시간: <p th:text="${scoring.end}"></p>
+    <p>시간 차이 (분): <span th:text="${scoring.end - scoring.start}">0</span> 분</p>
+
+    <a th:href="@{/scoring/delete/{id}(id=${scoring.id})}">[삭제]</a>
+    <a th:href="@{/scoring/updateForm/{id}(id=${scoring.id})}">[수정]</a>
+
+</body>
+</html>
