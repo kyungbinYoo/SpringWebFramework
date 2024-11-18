@@ -3,6 +3,8 @@ package com.focus.focus.data;
 import com.focus.focus.data.dto.ScoringDto;
 import com.focus.focus.data.entity.Scoring;
 
+import java.time.LocalTime;
+
 public class Utils {
     public static ScoringDto toDTO(Scoring entity) {
         return ScoringDto.builder()

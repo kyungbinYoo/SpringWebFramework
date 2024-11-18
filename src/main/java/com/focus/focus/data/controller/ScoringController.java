@@ -1,15 +1,19 @@
 package com.focus.focus.data.controller;
 
+import com.focus.focus.data.ScoringRepository;
 import com.focus.focus.data.dto.ScoringDto;
+import com.focus.focus.data.entity.Scoring;
 import com.focus.focus.service.ScoringService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -19,13 +23,17 @@ public class ScoringController {
 
     @Autowired
     ScoringService scoringService;
+    @Autowired
+    ScoringRepository scoringRepository;
     @RequestMapping("/scoring")
     public String list(Model model) {
+
         model.addAttribute("scoring", scoringService.findAll());
         return "list";
     }
     @RequestMapping("/scoring/{id}")
     public String read(@PathVariable long id, Model model) {
+
         model.addAttribute("scoring", scoringService.findById(id));
         return "read";
     }
@@ -54,6 +62,16 @@ public class ScoringController {
     public String update(@ModelAttribute ScoringDto scoring)  {
         scoringService.save(scoring);
         return "redirect:/scoring";
+    }
+
+    @GetMapping("/scoring/search")
+    public String searchByContent(@RequestParam("content") String content, Model model) {
+        // content로 검색
+        List<ScoringDto> results = scoringService.searchByContent(content);
+        // 검색 결과를 모델에 추가
+        model.addAttribute("scoringResults", results);
+
+        return "scoringSearchResults"; // 검색 결과를 표시할 Thymeleaf 템플릿 이름
     }
 
 }

@@ -3,6 +3,8 @@ package com.focus.focus.data.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "scoring")
 @ToString
@@ -17,8 +19,8 @@ public class Scoring {
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)
-    private int start;
+    private LocalTime start;
     @Column(nullable = false)
-    private int end;
+    private LocalTime end;
 
 }

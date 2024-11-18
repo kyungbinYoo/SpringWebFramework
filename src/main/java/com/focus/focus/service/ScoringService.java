@@ -33,4 +33,10 @@ public class ScoringService {
     public void deleteById(long id) {
         scoringRepository.deleteById(id);
     }
+
+    public List<ScoringDto> searchByContent(String content) {
+        return scoringRepository.findByContentContaining(content).stream()
+                .map(v -> Utils.toDTO(v))
+                .collect(Collectors.toList());
+    }
 }
