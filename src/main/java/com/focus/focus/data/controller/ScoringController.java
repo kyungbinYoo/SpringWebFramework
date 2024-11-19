@@ -3,7 +3,9 @@ package com.focus.focus.data.controller;
 import com.focus.focus.data.ScoringRepository;
 import com.focus.focus.data.dto.ScoringDto;
 import com.focus.focus.data.entity.Scoring;
+import com.focus.focus.data.entity.User;
 import com.focus.focus.service.ScoringService;
+import com.focus.focus.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,32 +26,48 @@ public class ScoringController {
     @Autowired
     ScoringService scoringService;
     @Autowired
+    private UserService userService;
+
+    @Autowired
     ScoringRepository scoringRepository;
     @RequestMapping("/scoring")
     public String list(Model model) {
-
         model.addAttribute("scoring", scoringService.findAll());
         return "list";
     }
+
     @RequestMapping("/scoring/{id}")
     public String read(@PathVariable long id, Model model) {
 
         model.addAttribute("scoring", scoringService.findById(id));
         return "read";
     }
+
     @RequestMapping("/scoring/delete/{id}")
     public String delete(@PathVariable long id)  {
         scoringService.deleteById(id);
         return "redirect:/scoring";
     }
 
-    @RequestMapping("/scoring/addform")
-    public String addform()  {
-        return "addForm";
+    @GetMapping("scoring/addform")
+    public String showAddScoringForm(@RequestParam("uid") long userId, Model model) {
+        // 유저 정보를 모델에 추가
+        model.addAttribute("user", userService.findById(userId));
+        return "addform";
     }
+
+
     @RequestMapping("/scoring/add")
-    public String add(@ModelAttribute ScoringDto scoring)  {
-        scoringService.save(scoring);
+    public String add(@ModelAttribute ScoringDto scoringDto, @RequestParam("userId") Long userId) {
+        // 유저 정보 가져오기
+        User user = userService.findById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
+        }
+        // ScoringDto에 유저 설정
+        scoringDto.setUser(user);
+        scoringService.save(scoringDto);
+
         return "redirect:/scoring";
     }
     @RequestMapping("/scoring/updateForm/{id}")
@@ -64,14 +82,5 @@ public class ScoringController {
         return "redirect:/scoring";
     }
 
-    @GetMapping("/scoring/search")
-    public String searchByContent(@RequestParam("content") String content, Model model) {
-        // content로 검색
-        List<ScoringDto> results = scoringService.searchByContent(content);
-        // 검색 결과를 모델에 추가
-        model.addAttribute("scoringResults", results);
-
-        return "scoringSearchResults"; // 검색 결과를 표시할 Thymeleaf 템플릿 이름
-    }
 
 }

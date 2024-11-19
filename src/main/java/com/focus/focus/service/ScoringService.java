@@ -27,6 +27,9 @@ public class ScoringService {
 
     public void save(ScoringDto scoringDto) {
         Scoring scoring = Utils.toEntity(scoringDto);
+        if (scoring.getUser() == null) {
+            throw new IllegalArgumentException("Scoring에 유저가 설정되지 않았습니다.");
+        }
         scoringRepository.save(scoring);
     }
 
@@ -34,9 +37,4 @@ public class ScoringService {
         scoringRepository.deleteById(id);
     }
 
-    public List<ScoringDto> searchByContent(String content) {
-        return scoringRepository.findByContentContaining(content).stream()
-                .map(v -> Utils.toDTO(v))
-                .collect(Collectors.toList());
-    }
 }

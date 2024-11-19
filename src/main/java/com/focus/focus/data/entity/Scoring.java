@@ -22,5 +22,12 @@ public class Scoring {
     private LocalTime start;
     @Column(nullable = false)
     private LocalTime end;
+    @Column(name = "uid", insertable=false, updatable=false)
+    private long uid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uid")
+    private User user;
+
 
 }

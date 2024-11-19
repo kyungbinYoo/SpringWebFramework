@@ -1,5 +1,6 @@
 package com.focus.focus.data.dto;
 
+import com.focus.focus.data.entity.User;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +18,7 @@ public class ScoringDto {
     private String content;
     private LocalTime start;
     private LocalTime end;
+    private Long uid;
+    private User user;
+
 }
