@@ -1,19 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>스코어링 리스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .scoring-item {
+            background: #fff;
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-item span {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .scoring-item a {
+            color: #5a5a8e;
+            text-decoration: none;
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .scoring-item a:hover {
+            color: #333;
+        }
+
+        .actions {
+            margin-top: 10px;
+        }
+
+        .actions a {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #5a5a8e;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .actions a:hover {
+            background-color: #464674;
+        }
+    </style>
 </head>
 <body>
-    집중력 측정하기!! <a href="/scoring/addform">[ADD]</a> <br/>
-    <div th:each="scoring : ${scoring}">
-        <span th:text="${scoring.id}"></span>
-        <a th:href="@{/scoring/{id}(id=${scoring.id})}"><span
-                th:text="${scoring.content}"></span></a><br/>
-        시작시간: <span th:text="${scoring.start}">시</span><br/>
-        종료시간:<span th:text="${scoring.end}">시</span><br/>
+<div th:each="scoring : ${scoring}" class="scoring-item">
+    <span th:text="${scoring.id}">1</span>
+    <a th:href="@{/scoring/{id}(id=${scoring.id})}">
+        <span th:text="${scoring.content}">내용</span>
+    </a>
+    <br/>
+    <span>시작시간: <span th:text="${scoring.start}">시작</span></span>
+    <span> | 종료시간: <span th:text="${scoring.end}">종료</span></span>
+    <br/>
+    <span>작성자: <span th:text="${scoring.user.name}">홍길동</span></span>
+    <div class="actions">
         <a th:href="@{/scoring/delete/{id}(id=${scoring.id})}">삭제</a>
         <a th:href="@{/scoring/updateForm/{id}(id=${scoring.id})}">수정</a>
     </div>
+</div>
 </body>
 </html>

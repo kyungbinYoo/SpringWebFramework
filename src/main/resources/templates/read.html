@@ -2,23 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>집중력 스코어링</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            width: 60%;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #5a5a8e;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        textarea {
+            width: 100%;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: none;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        #time-difference {
+            font-weight: bold;
+            color: #5a5a8e;
+        }
+
+        .actions {
+            margin-top: 20px;
+        }
+
+        .actions a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #5a5a8e;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .actions a:hover {
+            background-color: #464674;
+        }
+    </style>
 </head>
 <body>
-    집중력 스코어링 <br/>
-    <textarea rows="5" cols="40" th:text="${scoring.content}">
-     </textarea><br/>
+<div class="container">
+    <h1>집중력 스코어링</h1>
+    <textarea rows="5" cols="40" th:text="${scoring.content}"></textarea>
     <label>시작시간:</label>
     <p id="start-time" th:text="${scoring.start}" th:data-start="${scoring.start}"></p>
 
     <label>종료시간:</label>
     <p id="end-time" th:text="${scoring.end}" th:data-end="${scoring.end}"></p>
+
     <p>집중시간(분): <span id="time-difference">0</span> 분</p>
 
-    <a th:href="@{/scoring/delete/{id}(id=${scoring.id})}">[삭제]</a>
-    <a th:href="@{/scoring/updateForm/{id}(id=${scoring.id})}">[수정]</a>
+    <div class="actions">
+        <a th:href="@{/scoring/delete/{id}(id=${scoring.id})}">[삭제]</a>
+        <a th:href="@{/scoring/updateForm/{id}(id=${scoring.id})}">[수정]</a>
+    </div>
+</div>
 
-</body>
 <script>
     // 시간 차이 계산 함수
     function calculateTimeDifference() {
@@ -31,10 +102,8 @@
             const startParts = startTime.split(':');
             const endParts = endTime.split(':');
 
-
             const startMinutes = parseInt(startParts[0]) * 60 + parseInt(startParts[1]);
             const endMinutes = parseInt(endParts[0]) * 60 + parseInt(endParts[1]);
-
 
             const differenceInMinutes = endMinutes - startMinutes;
 
@@ -44,4 +113,5 @@
 
     document.addEventListener('DOMContentLoaded', calculateTimeDifference);
 </script>
+</body>
 </html>
