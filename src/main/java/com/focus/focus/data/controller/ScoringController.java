@@ -56,7 +56,12 @@ public class ScoringController {
         return "addform";
     }
 
-
+    @GetMapping("/addform")
+    public String showAddForm(@RequestParam("uid") long userId, Model model) {
+        // 유저 정보를 모델에 추가
+        model.addAttribute("user", userService.findById(userId));
+        return "addform";
+    }
     @RequestMapping("/scoring/add")
     public String add(@ModelAttribute ScoringDto scoringDto, @RequestParam("userId") Long userId) {
         // 유저 정보 가져오기
