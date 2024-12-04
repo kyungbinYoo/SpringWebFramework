@@ -8,6 +8,6 @@ import java.util.List;
 public interface ScoringRepository extends JpaRepository<Scoring, Long> {
     List<Scoring> findByContentContaining(String content);
 
-    
+
 
 }

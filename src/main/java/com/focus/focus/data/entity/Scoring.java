@@ -25,7 +25,7 @@ public class Scoring {
     @Column(name = "uid", insertable=false, updatable=false)
     private long uid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "uid")
     private User user;
 
