@@ -5,6 +5,7 @@ import com.focus.focus.data.dto.UserDto;
 import com.focus.focus.data.entity.Scoring;
 import com.focus.focus.data.entity.User;
 
+import java.time.Duration;
 import java.time.LocalTime;
 
 public class Utils {
@@ -14,19 +15,35 @@ public class Utils {
                 .content(entity.getContent())
                 .start(entity.getStart())
                 .end(entity.getEnd())
+                .totaltime(entity.getTotaltime())
                 .uid(entity.getUser().getId())
                 .user(entity.getUser())
                 .build();
     }
     public static Scoring toEntity(ScoringDto dto) {
-        return Scoring.builder()
+        LocalTime start = dto.getStart();
+        LocalTime end = dto.getEnd();
+
+        if (start != null && end != null) {
+            // 시간 차이를 구해서 totaltime에 반영
+            Duration duration = Duration.between(start, end);
+            Long totaltime = duration.toMinutes();
+
+
+            return Scoring.builder()
                 .id(dto.getId())
                 .content(dto.getContent())
-                .start(dto.getStart())
-                .end(dto.getEnd())
+                .start(start)
+                .end(end)
+                .totaltime(totaltime)
                 .uid(dto.getUser().getId())
                 .user(dto.getUser())
                 .build();
+        }
+        else {
+            // start와 end가 null일 경우 적절한 예외 처리
+            throw new IllegalArgumentException("Start and end times must not be null");
+        }
     }
 
     public static UserDto toDTO2(User entity) {

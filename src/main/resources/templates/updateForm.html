@@ -1,19 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form action="/scoring/update" th:object="${scoring}" >
-    id <input th:field="*{id}" readonly> <br/>
+<form action="/scoring/update" method="post" th:object="${scoring}">
+    <!-- Hidden input fields for ID and User ID -->
+    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" th:field="*{user.id}" />
 
-    content <textarea th:field="*{content}" rows="5" cols="40">
- </textarea><br/>
-    start-time <input th:field="*{start}"> <br/>
-    end-time <input th:field="*{end}"> <br/>
-    <input type="submit" value="수정"/>
+    <!-- Display ID (read-only) -->
+    <label for="id">ID:</label>
+    <input id="id" th:field="*{id}" readonly><br/>
+
+    <!-- Content textarea -->
+    <label for="content">Content:</label>
+    <textarea id="content" th:field="*{content}" rows="5" cols="40"></textarea><br/>
+
+    <!-- Start time input -->
+    <label for="start">Start Time:</label>
+    <input id="start" th:field="*{start}" type="text"><br/>
+
+    <!-- End time input -->
+    <label for="end">End Time:</label>
+    <input id="end" th:field="*{end}" type="text"><br/>
+
+    <!-- Submit button -->
+    <button type="submit">수정</button>
 </form>
-
-</body>
-</html>

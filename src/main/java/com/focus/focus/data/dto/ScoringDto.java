@@ -18,6 +18,7 @@ public class ScoringDto {
     private String content;
     private LocalTime start;
     private LocalTime end;
+    private Long totaltime;
     private Long uid;
     private User user;
 

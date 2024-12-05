@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 
 
 @Controller
@@ -30,6 +32,8 @@ public class ScoringController {
 
     @Autowired
     ScoringRepository scoringRepository;
+
+
     @RequestMapping("/scoring")
     public String list(Model model) {
         model.addAttribute("scoring", scoringService.findAll());
@@ -48,6 +52,12 @@ public class ScoringController {
         scoringService.deleteById(id);
         return "redirect:/scoring";
     }
+    /*@GetMapping("/addform")
+     public String showAddForm(@RequestParam("uid") long userId, Model model) {
+         // 유저 정보를 모델에 추가
+         model.addAttribute("user", userService.findById(userId));
+         return "addform";
+     }*/
 
     @GetMapping("scoring/addform")
     public String showAddScoringForm(@RequestParam("uid") long userId, Model model) {
@@ -56,12 +66,6 @@ public class ScoringController {
         return "addform";
     }
 
-    @GetMapping("/addform")
-    public String showAddForm(@RequestParam("uid") long userId, Model model) {
-        // 유저 정보를 모델에 추가
-        model.addAttribute("user", userService.findById(userId));
-        return "addform";
-    }
     @RequestMapping("/scoring/add")
     public String add(@ModelAttribute ScoringDto scoringDto, @RequestParam("userId") Long userId) {
         // 유저 정보 가져오기
@@ -81,11 +85,31 @@ public class ScoringController {
         model.addAttribute("scoring", scoring);
         return "updateForm";
     }
+
+
     @RequestMapping("/scoring/update")
-    public String update(@ModelAttribute ScoringDto scoring)  {
-        scoringService.save(scoring);
+    public String update(@ModelAttribute ScoringDto scoringDto) {
+        System.out.println("ScoringDto: " + scoringDto);
+
+        User user = scoringDto.getUser();
+        if (user == null) {
+            throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
+        }
+        scoringDto.setUser(user);
+        // ScoringDto 업데이트
+        scoringService.save(scoringDto);
+
         return "redirect:/scoring";
     }
+    @RequestMapping("/main")
+    public String getAverageTotaltimeByAgeGroup(Model model) {
+        List<Scoring> scorings = scoringRepository.findAll(); // DB에서 Scoring 엔티티 가져오기
+        Map<String, Double> averageTimeByAgeGroup = scoringService.calculateAverageTotaltimeByAgeGroup(scorings);
+
+        model.addAttribute("averageTimeByAgeGroup", averageTimeByAgeGroup); // 모델에 데이터 추가
+        return "main"; // 'scoringList'는 뷰 이름
+    }
+
 
 
 }

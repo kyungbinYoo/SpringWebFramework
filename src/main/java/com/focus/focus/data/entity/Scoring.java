@@ -22,10 +22,13 @@ public class Scoring {
     private LocalTime start;
     @Column(nullable = false)
     private LocalTime end;
+    @Column(nullable = false)
+    private Long totaltime;
+
     @Column(name = "uid", insertable=false, updatable=false)
     private long uid;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "uid")
     private User user;
 

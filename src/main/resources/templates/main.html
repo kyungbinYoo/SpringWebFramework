@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>나이대별 평균 시간</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h1>나이대별 평균 시간</h1>
+
+<!-- 테이블로 데이터 출력 -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>나이대</th>
+        <th>평균 시간</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${averageTimeByAgeGroup}">
+        <td th:text="${entry.key}">10대</td> <!-- 나이대 (10대, 20대 등) -->
+        <td th:text="${entry.value}">45.5</td> <!-- 평균 시간 -->
+    </tr>
+    </tbody>
+</table>
+
+<br>
+
+<!-- 차트로 데이터 시각화 -->
+<canvas id="myChart" width="400" height="200"></canvas>
+
+<script th:inline="javascript">
+    // Thymeleaf에서 전달된 데이터를 JavaScript로 받아서 차트 데이터로 사용
+    var averageTimeByAgeGroup = /*[[${averageTimeByAgeGroup}]]*/ {};
+    var labels = Object.keys(averageTimeByAgeGroup);
+    var data = Object.values(averageTimeByAgeGroup);
+
+    // Chart.js로 차트 그리기
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,  // 나이대 (10대, 20대 등)
+            datasets: [{
+                label: '나이대별 평균 시간',
+                data: data,  // 각 나이대별 평균 시간
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true  // y축 시작을 0부터
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

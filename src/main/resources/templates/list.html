@@ -70,6 +70,7 @@
     <span> | 종료시간: <span th:text="${scoring.end}">종료</span></span>
     <br/>
     <span>작성자: <span th:text="${scoring.user.name}">홍길동</span></span>
+    <span>총 집중시간: <span th:text="${scoring.totaltime}">총합</span></span>
     <div class="actions">
         <a th:href="@{/scoring/delete/{id}(id=${scoring.id})}">삭제</a>
         <a th:href="@{/scoring/updateForm/{id}(id=${scoring.id})}">수정</a>
