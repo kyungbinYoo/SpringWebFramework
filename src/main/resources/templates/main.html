@@ -58,6 +58,21 @@
             width: 600px; /* 차트 너비 */
             height: 300px; /* 차트 높이 */
         }
+
+        /* textarea 스타일 */
+        textarea {
+            width: 50%;
+            height: 100px;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+        }
     </style>
 </head>
 <body>
@@ -68,6 +83,12 @@
 <div class="button-container">
     <button onclick="location.href='/scoring'">Scoring</button>
     <button onclick="location.href='/user'">User</button>
+    <button id="focusButton">오늘의 집중 추천</button> <!-- 추가된 버튼 -->
+</div>
+
+<!-- 결과를 표시할 textarea -->
+<div style="text-align: center;">
+    <textarea id="focusResult" rows="5" cols="50" readonly>추천 결과를 기다리는 중...</textarea>
 </div>
 
 <h3 style="text-align: center;">나이대별 평균 집중 시간</h3>
@@ -82,13 +103,11 @@
     </thead>
     <tbody>
     <tr th:each="entry : ${averageTimeByAgeGroup}">
-        <td th:text="${entry.key}">10대</td> <!-- 나이대 (10대, 20대 등) -->
+        <td th:text="${entry.key}">10대</td> <!-- 나이대 -->
         <td th:text="${entry.value}">45.5</td> <!-- 평균 시간 -->
     </tr>
     </tbody>
 </table>
-
-<br>
 
 <!-- 차트로 데이터 시각화 -->
 <canvas id="myChart"></canvas>
@@ -121,6 +140,28 @@
             }
         }
     });
+
+    // 버튼 및 textarea 요소 가져오기
+    var btn = document.getElementById('focusButton');
+    var focusResult = document.getElementById('focusResult');
+
+    // 버튼 클릭 시 AJAX 요청 보내기
+    btn.onclick = function () {
+        fetch('/focus/recommendation')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                return response.text();
+            })
+            .then(data => {
+                focusResult.value = data; // 서버로부터 받은 결과를 textarea에 표시
+            })
+            .catch(error => {
+                focusResult.value = '추천을 가져오는 데 실패했습니다.'; // 오류 발생 시 메시지 표시
+                console.error('Error:', error);
+            });
+    };
 </script>
 
 </body>

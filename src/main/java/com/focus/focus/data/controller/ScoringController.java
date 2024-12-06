@@ -13,11 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
+
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 
 
 @Controller
@@ -39,6 +37,7 @@ public class ScoringController {
         model.addAttribute("scoring", scoringService.findAll());
         return "list";
     }
+
 
     @RequestMapping("/scoring/{id}")
     public String read(@PathVariable long id, Model model) {
@@ -73,12 +72,16 @@ public class ScoringController {
         if (user == null) {
             throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
         }
+
         // ScoringDto에 유저 설정
         scoringDto.setUser(user);
+
+        // Scoring 엔티티 변환 및 저장
         scoringService.save(scoringDto);
 
         return "redirect:/scoring";
     }
+
     @RequestMapping("/scoring/updateForm/{id}")
     public String updateScoring(@PathVariable Long id,  Model model) {
         ScoringDto scoring = scoringService.findById(id);
