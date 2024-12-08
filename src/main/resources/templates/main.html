@@ -115,18 +115,25 @@
 <script th:inline="javascript">
     // Thymeleaf에서 전달된 데이터를 JavaScript로 받아서 차트 데이터로 사용
     var averageTimeByAgeGroup = /*[[${averageTimeByAgeGroup}]]*/ {};
-    var labels = Object.keys(averageTimeByAgeGroup);
-    var data = Object.values(averageTimeByAgeGroup);
+
+    // 나이대 순서를 10대, 20대, 30대, 40대 순으로 강제 설정
+    var orderedAgeGroups = ['10대', '20대', '30대', '40대'];
+
+    // 나이대 순서대로 평균 시간을 배열로 정렬
+    var sortedLabels = orderedAgeGroups;
+    var sortedData = sortedLabels.map(function(ageGroup) {
+        return averageTimeByAgeGroup[ageGroup] || 0;  // 해당 나이대의 평균 시간을 가져옴 (없을 경우 0)
+    });
 
     // Chart.js로 차트 그리기
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labels,  // 나이대 (10대, 20대 등)
+            labels: sortedLabels,  // 나이대 순서대로 표시
             datasets: [{
                 label: '나이대별 평균 시간',
-                data: data,  // 각 나이대별 평균 시간
+                data: sortedData,  // 각 나이대별 평균 시간
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
